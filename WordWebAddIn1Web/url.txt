@@ -1,1 +1,3 @@
     <SourceLocation DefaultValue="https://wordwebaddin1web20200210021938.azurewebsites.net/home.html" />
+*Telefon-nummer
+*Mer på adress, + gatunummer
