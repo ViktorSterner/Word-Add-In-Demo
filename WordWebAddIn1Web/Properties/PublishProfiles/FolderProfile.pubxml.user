@@ -160,10 +160,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/08/2018 12:18:16</publishTime>
     </File>
     <File Include="bin/WordWebAddIn1Web.dll">
-      <publishTime>02/10/2020 09:38:49</publishTime>
+      <publishTime>02/10/2020 14:19:01</publishTime>
     </File>
     <File Include="bin/WordWebAddIn1Web.pdb">
-      <publishTime>02/10/2020 09:38:49</publishTime>
+      <publishTime>02/10/2020 14:19:01</publishTime>
     </File>
     <File Include="Content/Button.css">
       <publishTime>02/05/2020 19:12:54</publishTime>
