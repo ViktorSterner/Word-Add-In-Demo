@@ -111,9 +111,9 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
-    <Content Include="Home.css" />
+    <Content Include="css\Home.css" />
     <Content Include="Home.html" />
-    <Content Include="Home.js" />
+    <Content Include="js\Home.js" />
     <Content Include="Images\AddinIcon.png" />
     <Content Include="Images\Button16x16.png" />
     <Content Include="Images\Button32x32.png" />

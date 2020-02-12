@@ -26,10 +26,13 @@
             $('#button-text').text("Highlight!");
             $('#button-desc').text("Highlights the longest word.");
 
-            loadSampleData();
+            //loadSampleData();
+
+
 
             // Add a click event handler for the highlight button.
             $('#nameBtn').click(highlightFromArray);
+            $('#sampletextBtn').click(loadSampleData);
             $('#postalCodeBtn').click(highlightPostalCodes);
             $('#streetNameBtn').click(highlightStreetName);
         });
