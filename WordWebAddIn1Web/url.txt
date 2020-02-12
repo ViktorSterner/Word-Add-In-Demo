@@ -1,3 +1,27 @@
-    <SourceLocation DefaultValue="https://wordwebaddin1web20200210021938.azurewebsites.net/home.html" />
+﻿    <SourceLocation DefaultValue="https://wordwebaddin1web20200210021938.azurewebsites.net/home.html" />
 *Telefon-nummer
 *Mer på adress, + gatunummer
+
+function foo (email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+console.log(foo("viktor.sterner@holmen.com"));
+
+function foo1(string){
+  return /[0-9]{2}[0-1][0-9][0-9]{2}[-+][0-9]{4}/.test(string)
+}
+
+console.log(foo1("930101-0013"))
+
+function foo2(string){
+  return /^(s-|S-){0,1}[0-9]{3}\s?[0-9]{2}$/.test(string)
+}
+
+console.log(foo2("602 29"))
+
+output:
+
+true
+true
+true

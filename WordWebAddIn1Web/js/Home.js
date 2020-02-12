@@ -14,27 +14,17 @@
 
             // If not using Word 2016, use fallback logic.
             if (!Office.context.requirements.isSetSupported('WordApi', '1.1')) {
-                $("#template-description").text("This sample displays the selected text.");
-                $('#button-text').text("Display!");
-                $('#button-desc').text("Display the selected text");
-
-                $('#highlight-button').click(displaySelectedText);
                 return;
             }
 
-            $("#template-description").text("This sample highlights the longest word in the text you have selected in the document.");
-            $('#button-text').text("Highlight!");
-            $('#button-desc').text("Highlights the longest word.");
-
             //loadSampleData();
 
-
-
-            // Add a click event handler for the highlight button.
-            $('#nameBtn').click(highlightFromArray);
+            // Add a click event handler for button.
             $('#sampletextBtn').click(loadSampleData);
-            $('#postalCodeBtn').click(highlightPostalCodes);
-            $('#streetNameBtn').click(highlightStreetName);
+            $('#nameBtn').click(hideFromArray);
+            $('#postalCodeBtn').click(hidePostalCodes);
+            $('#streetNameBtn').click(hideStreetName);
+            $('#testingBtn').click(zeTest);
         });
     };
 
@@ -97,7 +87,7 @@
             .catch(errorHandler);
     }
 
-    function highlightFromArray() {
+    function hideFromArray() {
 
         let searchList = ["Gabriel", "August"];
 
@@ -125,7 +115,7 @@
         });
     }
 
-    function highlightPostalCodes() {
+    function hidePostalCodes() {
 
         var searchList = [];
 
@@ -176,7 +166,7 @@
         .catch(errorHandler);
     }
 
-    function highlightStreetName() {
+    function hideStreetName() {
         let searchList = ["Väg", "Gata"];
 
         searchList.forEach(function (searchWord) {
@@ -203,15 +193,29 @@
         });
     }
 
-    function displaySelectedText() {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-            function (result) {
-                if (result.status === Office.AsyncResultStatus.Succeeded) {
-                    showNotification('The selected text is:', '"' + result.value + '"');
-                } else {
-                    showNotification('Error:', result.error.message);
-                }
-            });
+    function zeTest() {
+        return Word.run(function (context) {
+
+            // Tell word for search for a word
+            let searchResult = context.document.body.search("gatan>", { matchWildcards: true, matchCase: false });
+
+            console.log(searchResult);
+
+            // Load the properties for the result
+            context.load(searchResult);
+
+            // Execute the batch
+            return context.sync()
+                .then(function () {
+
+                    // Loop through the results
+                    searchResult.items.forEach(function (result) {
+                        result.font.highlightColor = 'orange';
+                        result.insertText("_____", Word.InsertLocation.replace);
+                    });
+                });
+        })
+        .catch(errorHandler);
     }
 
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
@@ -222,7 +226,7 @@
         if (error instanceof OfficeExtension.Error) {
             console.log("Debug info: " + JSON.stringify(error.debugInfo));
         }
-    }
+    }   
 
     // Helper function for displaying notifications
     function showNotification(header, content) {
