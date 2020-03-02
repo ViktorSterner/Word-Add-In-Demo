@@ -22,9 +22,10 @@
             // Add a click event handler for button.
             $('#sampletextBtn').click(loadSampleData);
             $('#nameBtn').click(hideFromArray);
-            $('#postalCodeBtn').click(hidePostalCodes);
-            $('#streetNameBtn').click(hideStreetName);
+            //$('#postalCodeBtn').click(hidePostalCodes);
+            //$('#streetNameBtn').click(hideStreetName);
             $('#testingBtn').click(zeTest);
+            $('#shadowBtn').click(doItAll);
         });
     };
 
@@ -38,7 +39,7 @@
             body.clear();
             // Queue a command to insert text into the end of the Word document body.
             body.insertText(
-                "Hej Gabriel! Välkommen till Supergatan eller Ytvägen. Det finns två postnummer August känner till: 603 21 och 70300.",
+                "Hej Gabriel! Välkommen till Supergatan eller Ytvägen 12. Det finns två postnummer August känner till: 603 21 och 70300. 231 years old. Personnummer: 19930202-1234 eller 930202-1234",
                 Word.InsertLocation.end);
 
             // Synchronize the document state by executing the queued commands, and return a promise to indicate task completion.
@@ -197,9 +198,17 @@
         return Word.run(function (context) {
 
             // Tell word for search for a word
-            let searchResult = context.document.body.search("gatan>", { matchWildcards: true, matchCase: false });
-
-            console.log(searchResult);
+            // Ord som börjar med någon bokstav och slutar på gatan
+            //let searchResult = context.document.body.search("<[A-Za-z]@gatan>", { matchWildcards: true, matchCase: false });
+            // Personnummer
+            // Hittar 930202-1234
+            //(< [0 - 9]{ 6 })@([-]) @([0 - 9]{ 4 }>)
+            // Hittar 19930202-1234
+            //(< [0 - 9]{ 8 }) @([-]) @([0 - 9]{ 4 }>)
+             //5 siffror, no more no less
+            //let searchResult = context.document.body.search("<[0-9]{5}>", { matchWildcards: true, matchCase: false });
+            // 3 siffror "space" 2 siffror  
+            let searchResult = context.document.body.search("(<[0-9]{3}>)@([ ])@(<[0-9]{2}>)", { matchWildcards: true, matchCase: false });
 
             // Load the properties for the result
             context.load(searchResult);
@@ -207,7 +216,6 @@
             // Execute the batch
             return context.sync()
                 .then(function () {
-
                     // Loop through the results
                     searchResult.items.forEach(function (result) {
                         result.font.highlightColor = 'orange';
@@ -216,6 +224,47 @@
                 });
         })
         .catch(errorHandler);
+    }
+
+    function doItAll() {
+        return Word.run(function (context) {
+
+            let searchResult = [];
+            // Tell word for search for a word
+            // Ord som börjar med någon bokstav och slutar på gatan
+            searchResult.push(context.document.body.search("<[A-Za-z]@gatan>", { matchWildcards: true, matchCase: false }));
+            // Ord som börjar med någon bokstav och slutar på vägen
+            searchResult.push(context.document.body.search("<[A-Za-z]@vägen>", { matchWildcards: true, matchCase: false }));
+            //blagatan 1
+            //(<[A-Za-z]@gatan>)@([ ])@(<[0-9]{1}>)
+            searchResult.push(context.document.body.search("(<[A-Za-z]@gatan>)@([ ])@(<[0-9]{1;}>)", { matchWildcards: true, matchCase: false }));
+            searchResult.push(context.document.body.search("(<[A-Za-z]@vägen>)@([ ])@(<[0-9]{1;}>)", { matchWildcards: true, matchCase: false }));
+            // Personnummer
+            // Hittar 930202-1234 och 19930202-1234
+            searchResult.push(context.document.body.search("(<[0-9]{6;8})@([-])@([0-9]{4}>)", { matchWildcards: true, matchCase: false }));
+            //5 siffror, no more no less
+            searchResult.push(context.document.body.search("<[0-9]{5}>", { matchWildcards: true, matchCase: false }));
+            // 3 siffror "space" 2 siffror  
+            searchResult.push(context.document.body.search("(<[0-9]{3}>)@([ ])@(<[0-9]{2}>)", { matchWildcards: true, matchCase: false }));
+
+            // Load the properties for the result
+            searchResult.forEach(function (rangeCollection) {
+                context.load(rangeCollection);
+            });
+
+            // Execute the batch
+            return context.sync()
+                .then(function () {
+                    // Loop through the results and the items in the result
+                    searchResult.forEach(function (rangeCollection) {
+                        rangeCollection.items.forEach(function (result) {
+                            result.font.highlightColor = 'orange';
+                            result.insertText("_____", Word.InsertLocation.replace);
+                        });
+                    });
+                })
+        })
+            .catch(errorHandler);
     }
 
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
