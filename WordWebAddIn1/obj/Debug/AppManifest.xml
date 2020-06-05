@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
-     Name="WordWebAddIn1"
-     ProductID="{90360800-190d-45ba-9876-a3ed0837ebea}"
+     Name="GDPRP-AddIn"
+     ProductID="{cafdb5fa-8f35-4577-b3a9-9d2b11931854}"
      Version="1.0.0.0"
      SharePointMinVersion="15.0.0.0"
 >
   <Properties>
-    <Title>WordWebAddIn1</Title>
+    <Title>GDPRP-AddIn</Title>
     <StartPage>https://go.microsoft.com/fwlink/?LinkID=278993</StartPage>
   </Properties>
 

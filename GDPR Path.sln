@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordWebAddIn1", "WordWebAddIn1\WordWebAddIn1.csproj", "{348DBBB0-4FCB-475F-810C-F1A2DC65FBEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDPRP-AddIn", "WordWebAddIn1\GDPRP-AddIn.csproj", "{348DBBB0-4FCB-475F-810C-F1A2DC65FBEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordWebAddIn1Web", "WordWebAddIn1Web\WordWebAddIn1Web.csproj", "{41BDDC4B-ECF7-4CD7-B50D-0CA15961A257}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDPRP-Web", "WordWebAddIn1Web\GDPRP-Web.csproj", "{41BDDC4B-ECF7-4CD7-B50D-0CA15961A257}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

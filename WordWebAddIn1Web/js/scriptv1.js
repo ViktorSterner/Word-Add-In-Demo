@@ -14,27 +14,18 @@
 
             // If not using Word 2016, use fallback logic.
             if (!Office.context.requirements.isSetSupported('WordApi', '1.1')) {
-                $("#template-description").text("This sample displays the selected text.");
-                $('#button-text').text("Display!");
-                $('#button-desc').text("Display the selected text");
-
-                $('#highlight-button').click(displaySelectedText);
                 return;
             }
 
-            $("#template-description").text("This sample highlights the longest word in the text you have selected in the document.");
-            $('#button-text').text("Highlight!");
-            $('#button-desc').text("Highlights the longest word.");
-
             //loadSampleData();
 
-
-
-            // Add a click event handler for the highlight button.
-            $('#nameBtn').click(highlightFromArray);
+            // Add a click event handler for button.
             $('#sampletextBtn').click(loadSampleData);
-            $('#postalCodeBtn').click(highlightPostalCodes);
-            $('#streetNameBtn').click(highlightStreetName);
+            $('#nameBtn').click(hideFromArray);
+            //$('#postalCodeBtn').click(hidePostalCodes);
+            //$('#streetNameBtn').click(hideStreetName);
+            //$('#testingBtn').click(zeTest);
+            $('#shadowBtn').click(doItAll);
         });
     };
 
@@ -48,7 +39,8 @@
             body.clear();
             // Queue a command to insert text into the end of the Word document body.
             body.insertText(
-                "Hej Gabriel! Välkommen till Supergatan eller Ytvägen. Det finns två postnummer August känner till: 603 21 och 70300.",
+                "Hej Gabriel! Välkommen till Supergatan eller Ytvägen 12. Det finns två postnummer August känner till: 603 21 och 70300. 231 years old. Personnummer: 19930202-1234 eller 930202-1234."
+                +"En bil kan ha registreringsnummer MLB 803 och MLB 80A.",
                 Word.InsertLocation.end);
 
             // Synchronize the document state by executing the queued commands, and return a promise to indicate task completion.
@@ -97,7 +89,7 @@
             .catch(errorHandler);
     }
 
-    function highlightFromArray() {
+    function hideFromArray() {
 
         let searchList = ["Gabriel", "August"];
 
@@ -125,7 +117,7 @@
         });
     }
 
-    function highlightPostalCodes() {
+    function hidePostalCodes() {
 
         var searchList = [];
 
@@ -176,7 +168,7 @@
         .catch(errorHandler);
     }
 
-    function highlightStreetName() {
+    function hideStreetName() {
         let searchList = ["Väg", "Gata"];
 
         searchList.forEach(function (searchWord) {
@@ -203,15 +195,79 @@
         });
     }
 
-    function displaySelectedText() {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-            function (result) {
-                if (result.status === Office.AsyncResultStatus.Succeeded) {
-                    showNotification('The selected text is:', '"' + result.value + '"');
-                } else {
-                    showNotification('Error:', result.error.message);
-                }
+    function zeTest() {
+        return Word.run(function (context) {
+
+            // Tell word for search for a word
+            // Ord som börjar med någon bokstav och slutar på gatan
+            //let searchResult = context.document.body.search("<[A-Za-z]@gatan>", { matchWildcards: true, matchCase: false });
+            // Personnummer
+            // Hittar 930202-1234
+            //(< [0 - 9]{ 6 })@([-]) @([0 - 9]{ 4 }>)
+            // Hittar 19930202-1234
+            //(< [0 - 9]{ 8 }) @([-]) @([0 - 9]{ 4 }>)
+             //5 siffror, no more no less
+            //let searchResult = context.document.body.search("<[0-9]{5}>", { matchWildcards: true, matchCase: false });
+            // 3 siffror "space" 2 siffror  
+            let searchResult = context.document.body.search("(<[0-9]{3}>)@([ ])@(<[0-9]{2}>)", { matchWildcards: true, matchCase: false });
+
+            // Load the properties for the result
+            context.load(searchResult);
+
+            // Execute the batch
+            return context.sync()
+                .then(function () {
+                    // Loop through the results
+                    searchResult.items.forEach(function (result) {
+                        result.font.highlightColor = 'orange';
+                        result.insertText("_____", Word.InsertLocation.replace);
+                    });
+                });
+        })
+        .catch(errorHandler);
+    }
+
+    function doItAll() {
+        return Word.run(function (context) {
+
+            let searchResult = [];
+            // Tell word for search for a word
+            // Ord som börjar med någon bokstav och slutar på gatan
+            searchResult.push(context.document.body.search("<[A-Za-z]@gatan>", { matchWildcards: true, matchCase: false }));
+            // Ord som börjar med någon bokstav och slutar på vägen
+            searchResult.push(context.document.body.search("<[A-Za-z]@vägen>", { matchWildcards: true, matchCase: false }));
+            //blagatan 1
+            //(<[A-Za-z]@gatan>)@([ ])@(<[0-9]{1}>)
+            searchResult.push(context.document.body.search("(<[A-Za-z]@gatan>)@([ ])@(<[0-9]{1;}>)", { matchWildcards: true, matchCase: false }));
+            searchResult.push(context.document.body.search("(<[A-Za-z]@vägen>)@([ ])@(<[0-9]{1;}>)", { matchWildcards: true, matchCase: false }));
+            // Personnummer
+            // Hittar 930202-1234 och 19930202-1234
+            searchResult.push(context.document.body.search("(<[0-9]{6;8})@([-])@([0-9]{4}>)", { matchWildcards: true, matchCase: false }));
+            //5 siffror, no more no less
+            searchResult.push(context.document.body.search("<[0-9]{5}>", { matchWildcards: true, matchCase: false }));
+            // 3 siffror "space" 2 siffror  
+            searchResult.push(context.document.body.search("(<[0-9]{3}>)@([ ])@(<[0-9]{2}>)", { matchWildcards: true, matchCase: false }));
+            // Regnummer, hittar MLB 803 och MLB 80A
+            searchResult.push(context.document.body.search("(<[A-Z]{3}>)@([ ])@(<[0-9]{2})@([0-9A-Z]{1}>)", { matchWildcards: true, matchCase: false }));
+
+            // Load the properties for the result
+            searchResult.forEach(function (rangeCollection) {
+                context.load(rangeCollection);
             });
+
+            // Execute the batch
+            return context.sync()
+                .then(function () {
+                    // Loop through the results and the items in the result
+                    searchResult.forEach(function (rangeCollection) {
+                        rangeCollection.items.forEach(function (result) {
+                            result.font.highlightColor = 'orange';
+                            result.insertText("_____", Word.InsertLocation.replace);
+                        });
+                    });
+                })
+        })
+            .catch(errorHandler);
     }
 
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
@@ -222,7 +278,7 @@
         if (error instanceof OfficeExtension.Error) {
             console.log("Debug info: " + JSON.stringify(error.debugInfo));
         }
-    }
+    }   
 
     // Helper function for displaying notifications
     function showNotification(header, content) {

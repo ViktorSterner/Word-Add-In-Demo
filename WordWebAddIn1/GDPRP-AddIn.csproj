@@ -50,9 +50,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WordWebAddIn1Web\WordWebAddIn1Web.csproj">
+    <ProjectReference Include="..\WordWebAddIn1Web\GDPRP-Web.csproj">
       <Project>{41BDDC4B-ECF7-4CD7-B50D-0CA15961A257}</Project>
-      <Name>WordWebAddIn1Web</Name>
+      <Name>GDPRP-Web</Name>
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <OutputItemType>SharePointWebProjectOutput</OutputItemType>

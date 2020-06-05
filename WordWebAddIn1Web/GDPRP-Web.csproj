@@ -113,7 +113,7 @@
     <Content Include="Functions\FunctionFile.js" />
     <Content Include="css\Home.css" />
     <Content Include="Home.html" />
-    <Content Include="js\Home.js" />
+    <Content Include="js\scriptv1.js" />
     <Content Include="Images\AddinIcon.png" />
     <Content Include="Images\Button16x16.png" />
     <Content Include="Images\Button32x32.png" />

@@ -34,7 +34,7 @@ body {
     min-width: inherit;
 }
 
-#nameBtn {
+/*#nameBtn {
     background-color: green;
 }
 
@@ -45,3 +45,11 @@ body {
 #streetNameBtn {
     background-color: yellow;
 }
+
+#testingBtn{
+    background-color:orange;
+}
+
+#shadowBtn{
+    background-color:yellow;
+}*/
